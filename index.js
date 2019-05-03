@@ -61,9 +61,9 @@ module.exports = (builds, options = {}) => {
 	const setTasks = () => {
 		Object.entries(buildHierarchy).forEach(([taskName, subTaskNames]) => {
 
-			if (options.createSubTasks) {
+			if (options.createSubTasks || options.watchSubTasks) {
 				subTaskNames.forEach(subTaskName => {
-					setTask(subTaskName);
+					options.createSubTasks && setTask(subTaskName);
 					options.watchSubTasks && setWatcher(subTaskName);
 				});
 			}
