@@ -38,6 +38,7 @@ module.exports = (builds, options = {}) => {
 
 	const refObj = {};
 	const buildHierarchy = {};
+	const taskCbs = {};
 
 	const getSeries = taskName => {
 		let {config, cb} = refObj[taskName];
@@ -118,10 +119,11 @@ module.exports = (builds, options = {}) => {
 					config.filename = config.filename || `${config.id}.${name}`;
 
 					config.displayName = (config.displayName || (name + config.taskDelimiter + config.name));
-					callback = (cb) => build.cb(config, cb);
+					callback = (cb) => build.cb({...{cb: refObj[config.displayName].cb[0], cbs: taskCbs,}, ...config,}, cb);
 					callback.displayName = config.displayName;
 					refObj[config.displayName] = {config, cb: [callback]};
 					buildHierarchy[name].push(config.displayName);
+					taskCbs[config.displayName] = callback;
 
 					if (!!config.depMin) {
 						let callbackMin;
@@ -135,10 +137,11 @@ module.exports = (builds, options = {}) => {
 						};
 
 						configMin.displayName = (configMin.displayName || (name + configMin.taskDelimiter + configMin.name));
-						callbackMin = (cb) => build.cb(configMin, cb);
+						callbackMin = (cb) => build.cb({...{cb: refObj[configMin.displayName].cb[0], cbs: taskCbs,}, ...configMin,}, cb);
 						callbackMin.displayName = configMin.displayName;
 						refObj[configMin.displayName] = {config: configMin, cb: [callbackMin]};
 						buildHierarchy[name].push(configMin.displayName);
+						taskCbs[configMin.displayName] = callback;
 					}
 				});
 			});

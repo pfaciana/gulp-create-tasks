@@ -106,7 +106,7 @@ const builds = {
 			debug: {title: 'clean:all'},
 		}],
 		cb(_, cb) {
-			return gulp.src(_.exclude, {base: (_.base || './'), since: gulp.lastRun(this.cb)})
+			return gulp.src(_.exclude, {base: (_.base || './'), since: gulp.lastRun(_.cb)})
 				.pipe(gulpif(_.ceol, ceol(_.ceol)))
 				.pipe(gulp.dest((_.dest || './')));
 		},
@@ -128,6 +128,7 @@ createTasks(builds, options);
 # Other Notes and Syntactic Sugar
 
 * `cb` receive two arguments, the first is the options object, the second is the gulp `cb` callback. See https://gulpjs.com/docs/en/api/task for more info on the cb callback in gulp
+* in addition to the the current options, the options object also return a `cb` field for the current callback, and a `cbs` field for all task callbacks in an object. This can be useful when calling gulp.lastRun() 
 * I used `_` as the variable name because I think it's easier to read, but if this is confusing, you can replace `_` with the variable name `options`
 * if `id` is an array, then `src` must be indexed the same way. See css build object above. Basically this means you have two tasks that are identical in every way except in the `src` field. So rather then repeating code, you can make `id` and `src` matching indexed arrays. This is a shorthand usage. You can achieve the same thing with two `configs` and copying and pasting the common fields between them.
 * `depMin` is similar but for file/glob dependencies. In the example above I wanted to use owl carousel's compressed version for production, but uncompressed for dev. With `depMin` defined, the task will automatically run twice. One with the original `dep`, then one with `depMin` replacing `dep`. It also creates a `minify` field set to true, which you can use with a gulpif in your pipes. 
