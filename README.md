@@ -23,7 +23,7 @@ whose information will get passed to the `cb` callback. The contents of this obj
 dependant on what you want to pass to the callback. Typically you might want to pass values for at least 
 `src` and `dest`, but it's completely optional. You could just as easily hard code everything in the `cb` callback,
 making the contents of the `configs` array unnecessary. I would not recommend that, but hey It's your code!
-Also, having an `id` is nice because it display that name in the console output, but if left empty it will still work,
+Also, having an `id` is nice because it displays that name in the console output, but if left empty it will still work,
 it just displays `undefined`. There is also some syntactic sugar which I will discuss below.
 
 The `options` object is simply global options that get merged into every local `configs` options that is sent to
@@ -34,8 +34,6 @@ can also pass in the `options`, if needed, which I'll discuss below.
 
 
 # Usage
-
-requiring it. the condEOL variable itself is a function.
 
 ```node
 createTasks = require('gulp-create-tasks')
@@ -128,10 +126,10 @@ createTasks(builds, options);
 # Other Notes and Syntactic Sugar
 
 * `cb` receive two arguments, the first is the options object, the second is the gulp `cb` callback. See https://gulpjs.com/docs/en/api/task for more info on the cb callback in gulp
-* in addition to the the current options, the options object also return a `cb` field for the current callback, and a `cbs` field for all task callbacks in an object. This can be useful when calling gulp.lastRun() 
+* in addition to the the current options, the options object also returns a `cb` field for the current callback, and a `cbs` field for all task callbacks in an object. This can be useful when calling gulp.lastRun() 
 * I used `_` as the variable name because I think it's easier to read, but if this is confusing, you can replace `_` with the variable name `options`
 * if `id` is an array, then `src` must be indexed the same way. See css build object above. Basically this means you have two tasks that are identical in every way except in the `src` field. So rather then repeating code, you can make `id` and `src` matching indexed arrays. This is a shorthand usage. You can achieve the same thing with two `configs` and copying and pasting the common fields between them.
-* `depMin` is similar but for file/glob dependencies. In the example above I wanted to use owl carousel's compressed version for production, but uncompressed for dev. With `depMin` defined, the task will automatically run twice. One with the original `dep`, then one with `depMin` replacing `dep`. It also creates a `minify` field set to true, which you can use with a gulpif in your pipes. 
-* if `filename` is not set (in the local options), then by default the `configs` id and the `build` key will be joined with a period to create the filename. In the example above: `css` filenames would be `styles.css` and `editor.css`,  and `js` filename would be `scripts.js`
+* `depMin` is similar but for file/glob dependencies. In the example above I wanted to use owl carousel's compressed version for production, but uncompressed for dev. With `depMin` defined, the task will automatically run twice. One with the original `dep`, then one with `depMin` replacing `dep`. It also creates a `minify` field set to true the second time around, which you can use with a gulpif in your pipes. 
+* if `filename` is not set (in the local options), then by default the `configs` id and the `build` key will be joined with a period to create the filename. In the example above: `css` filenames would be `styles.css` and `editor.css`,  and `js` filename would be `scripts.js` (and `scripts.min.js` for `depMin` callback)
 * `pre` and `post` fields are used as pre and post gulp.series callbacks. For example, as shown above, if you want to run all the `clean` tasks after the current task, then referencing it by name in the `post` field will run those. You do the same for `pre` (if needed). You can also isolate a specific task like this {..., post: ['clear > all'], ...}. This will only run the `all` task under `clean`.
 * if defined, the `watch` field signals which files to watch for the automated watcher. If left blank or `false`, no watcher is set. If set to `true`, then it will use the `src` field as the `watch` files
