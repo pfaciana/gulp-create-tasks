@@ -125,15 +125,14 @@ module.exports = (builds, options = {}) => {
 					buildHierarchy[name].push(config.displayName);
 					taskCbs[config.displayName] = callback;
 
-					if (!!config.depMin) {
+					if (!!config.depMin || !!config.alsoMin) {
 						let callbackMin;
 						const configMin = {
 							...config, ...{
-								dep: config.depMin,
 								minify: true,
 								name: config.name + config.taskDelimiter + 'min',
 								displayName: config.displayName + config.taskDelimiter + 'min'
-							}
+							}, ...(!!config.depMin ? {dep: config.depMin} : {})
 						};
 
 						configMin.displayName = (configMin.displayName || (name + configMin.taskDelimiter + configMin.name));
