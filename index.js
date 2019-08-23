@@ -32,6 +32,7 @@ module.exports = (builds, options = {}) => {
 		pre: [],
 		sass: {outputStyle: 'expanded',},
 		size: {showFiles: true, showTotal: false, gzip: true},
+		sizeNgz: {showFiles: true, showTotal: false, gzip: false},
 		src: false,
 		watch: false,
 	};

@@ -1,6 +1,6 @@
 {
 	"name": "gulp-create-tasks",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "gulp-create-tasks helps you create tasks and watcher in gulp 4 automatically.",
 	"main": "index.js",
 	"repository": {
